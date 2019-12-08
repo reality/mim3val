@@ -21,7 +21,8 @@ sentences = []
 with open('./annotations_fixed.tsv') as sentfile:
   reader = csv.reader(sentfile, delimiter='\t')
   for row in reader:
-    truth = "negated" in row[3]
+    truth = "negated" in row[4]
+    print(row[3] + ' ' + str(truth))
     truths.append(truth)
 
     iris.append(row[1])
@@ -58,6 +59,7 @@ for i in range(len(sentences)):
       tp += 1
     else:
       fp += 1
+      print(s)
   else:
     if truths[i]:
       fn += 1
