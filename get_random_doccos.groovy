@@ -45,7 +45,7 @@ while(entries.size() < 1000) {
   }
 
   if(textRecord.indexOf('     ') == -1) {
-    entries << textRecord.replaceAll('\n', '').replaceAll('\\s+', ' ')
+    entries << textRecord.replaceAll('\n', '').replaceAll('\\s+', ' ').replaceAll('\.', '. ')
   }
 
   println entries.size()

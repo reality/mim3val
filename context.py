@@ -49,7 +49,8 @@ for i in range(len(sentences)):
   for t in foundTargets:
     if str(t.getCategory()[0]) == iris[i].lower():
       for p in markup.predecessors(t):
-        if 'definite_negated_existence' in p.getCategory():
+        print(p.getCategory())
+        if 'definite_negated_existence' in p.getCategory() or 'probable_negated_existence' in p.getCategory():
           status = True
     else:
       print('exluded')
@@ -63,6 +64,8 @@ for i in range(len(sentences)):
   else:
     if truths[i]:
       fn += 1
+      print('fn')
+      print(s)
 
   print(i)
 
