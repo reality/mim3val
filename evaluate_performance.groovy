@@ -11,6 +11,10 @@ new File('./annotations_fixed.tsv').splitEachLine('\t') {
       tp++
     } else {
       fp++
+      println 'fp'
+      println it[6]
+      println it[2]
+      println ''
     }
   } 
 

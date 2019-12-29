@@ -22,7 +22,6 @@ with open('./annotations_fixed.tsv') as sentfile:
   reader = csv.reader(sentfile, delimiter='\t')
   for row in reader:
     truth = "negated" in row[4]
-    print(row[3] + ' ' + str(truth))
     truths.append(truth)
 
     iris.append(row[1])
@@ -49,23 +48,18 @@ for i in range(len(sentences)):
   for t in foundTargets:
     if str(t.getCategory()[0]) == iris[i].lower():
       for p in markup.predecessors(t):
-        print(p.getCategory())
         if 'definite_negated_existence' in p.getCategory() or 'probable_negated_existence' in p.getCategory():
           status = True
-    else:
-      print('exluded')
 
   if status:
     if truths[i]:
       tp += 1
     else:
       fp += 1
-      print(s)
+      print('fp: ' + s)
   else:
     if truths[i]:
       fn += 1
-      print('fn')
-      print(s)
 
   print(i)
 

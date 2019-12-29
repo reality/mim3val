@@ -17,7 +17,7 @@ def file = new RandomAccessFile('./NOTEEVENTS.csv', 'r')
 
 println "File loaded. Beginning selection sequence..."
 
-while(entries.size() < 1000) {
+while(entries.size() < 7000) {
   def rPos = RandomUtils.nextLong(new Long(0), file.length())
 
   file.seek(rPos)
@@ -45,8 +45,11 @@ while(entries.size() < 1000) {
   }
 
   if(textRecord.indexOf('     ') == -1) {
-    entries << textRecord.replaceAll('\n', '').replaceAll('\\s+', ' ').replaceAll('\.', '. ')
+    entries << textRecord.replaceAll('\n', '').replaceAll('\\s+', ' ').replaceAll('\\.', '. ')
   }
+  // cont: 0.57, 0.94
+  // koment 0.88 0.98
+  // neg-det:
 
   println entries.size()
 }
@@ -67,7 +70,11 @@ def sentences = entries.collect { entry ->
 
   println "${++i}"
 
-  aDocument.get(CoreAnnotations.SentencesAnnotation.class).collect { it.toString() }
+  def s = aDocument.get(CoreAnnotations.SentencesAnnotation.class).collect { it.toString() }
+  s = s.findAll { it.indexOf('\t') == -1 && it.indexOf('---') == -1 && it.tokenize(' ').size() < 30 }
+  def rPos = RandomUtils.nextInt(0, s.size())
+  s[rPos]
 }.flatten()
+sentences.removeAll([null])
 
 new File('sentences.txt').text = sentences.join('\n')
