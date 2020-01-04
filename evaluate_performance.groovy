@@ -14,6 +14,7 @@ new File('./annotations_fixed.tsv').splitEachLine('\t') {
       println 'fp'
       println it[6]
       println it[2]
+      println it[5]
       println ''
     }
   } 
@@ -22,6 +23,10 @@ new File('./annotations_fixed.tsv').splitEachLine('\t') {
     fn++
   }
 }
+
+println tp
+println fp
+println fn
 
 def precision = tp / (tp + fp)
 def recall = tp / (tp + fn)

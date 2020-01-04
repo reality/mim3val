@@ -18,12 +18,7 @@ def modifies(g,n,modifiers):
 tp = 0.0
 fp = 0.0
 fn = 0.0
-
-targets = []
-with open('./hpo_labels.txt') as labelfile:
-  reader = csv.reader(labelfile, delimiter='\t')
-  for row in reader:
-    targets.append(contextItem((row[0], row[1], '', '')))
+tn = 0.0
 
 iris = []
 truths = []
@@ -31,6 +26,7 @@ sentences = []
 with open('./annotations_fixed.tsv') as sentfile:
   reader = csv.reader(sentfile, delimiter='\t')
   for row in reader:
+    print(row)
     truth = "negated" in row[4]
     truths.append(truth)
 
@@ -38,9 +34,19 @@ with open('./annotations_fixed.tsv') as sentfile:
     sentences.append(row[6])
 
 modifiers = itemData.get_items(
-    "https://raw.githubusercontent.com/chapmanbe/pyConTextNLP/master/KB/lexical_kb_05042016.yml")
+    "https://raw.githubusercontent.com/chapmanbe/pyConTextNLP/20c752d6bd5191833f21ab81fc7f41877dca1db6/KB/pneumonia_modifiers.yml")
 
 for i in range(len(sentences)):
+
+  # omg
+  targets = []
+  with open('./hpo_labels.txt') as labelfile:
+    reader = csv.reader(labelfile, delimiter='\t')
+    for row in reader:
+      if(row[1] == iris[i]): 
+        targets.append(contextItem((row[0], row[1], '', '')))
+
+
   s = sentences[i]
 
   markup = pyConText.ConTextMarkup()
@@ -50,29 +56,37 @@ for i in range(len(sentences)):
   markup.markItems(modifiers, mode = "modifier")
   markup.markItems(targets, mode = "target")
 
-  markup.pruneMarks()
-
   markup.applyModifiers()
+  markup.pruneMarks()
+  markup.pruneSelfModifyingRelationships()
+  markup.dropInactiveModifiers()
 
   foundTargets = [n[0] for n in markup.nodes(data = True) if n[1].get("category","") == 'target']
 
   status = False
 
-  for edge in markup.edges():
-    print(edge)
-
-  print(iris[i])
-  for t in foundTargets:
-    if str(t.getCategory()[0]) == iris[i].lower():
-      if modifies(markup, t, ['definite_negated_existence', 'probable_negated_existence']):
+  for edge in markup.edges(data=True):
+    c = edge[0].getCategory()[0]
+    if c == 'definite_negated_existence' or c == 'probable_negated_existence':
+      if edge[1].getCategory()[0] == iris[i].lower():
         status = True
+    print(edge[2])
+    
+
+  #for t in foundTargets:
+  #  if str(t.getCategory()[0]) == iris[i].lower():
+  #    if modifies(markup, t, ['definite_negated_existence', 'probable_negated_existence']):
+  #      status = True
       #print(t)
       #for p in markup.predecessors(t):
       #  print(p)
       #  if 'definite_negated_existence' in p.getCategory() or 'probable_negated_existence' in p.getCategory():
       #    status = True
 
-  if status:
+
+  print(status)
+  print(truths[i])
+  if status == True:
     if truths[i]:
       tp += 1
     else:
@@ -81,9 +95,17 @@ for i in range(len(sentences)):
   else:
     if truths[i]:
       fn += 1
+    else:
+      tn += 1
+      print('woo')
 
   print(i)
   print(' ')
+
+print(tp)
+print(fp)
+print(fn)
+print(tn)
 
 precision = tp / (tp + fp)
 recall = tp / (tp + fn)
