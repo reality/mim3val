@@ -17,7 +17,7 @@ def file = new RandomAccessFile('./NOTEEVENTS.csv', 'r')
 
 println "File loaded. Beginning selection sequence..."
 
-while(entries.size() < 7000) {
+while(entries.size() < 1000) {
   def rPos = RandomUtils.nextLong(new Long(0), file.length())
 
   file.seek(rPos)
@@ -47,9 +47,10 @@ while(entries.size() < 7000) {
   if(textRecord.indexOf('     ') == -1) {
     entries << textRecord.replaceAll('\n', '').replaceAll('\\s+', ' ').replaceAll('\\.', '. ')
   }
-  // cont: 0.57, 0.94
-  // koment 0.88 0.98
-  // neg-det:
+  // @500
+  // cont: p: 0.463 r: 0.95
+  // koment: p: 0.77 r: 0.9 
+  // neg-det: p: 0.6 r: 0.56
 
   println entries.size()
 }
@@ -71,10 +72,11 @@ def sentences = entries.collect { entry ->
   println "${++i}"
 
   def s = aDocument.get(CoreAnnotations.SentencesAnnotation.class).collect { it.toString() }
-  s = s.findAll { it.indexOf('\t') == -1 && it.indexOf('---') == -1 && it.tokenize(' ').size() < 30 }
-  def rPos = RandomUtils.nextInt(0, s.size())
-  s[rPos]
+  //s = s.findAll { it.indexOf('\t') == -1 && it.indexOf('---') == -1 && it.tokenize(' ').size() < 30 }
+  //def rPos = RandomUtils.nextInt(0, s.size())
+  //s[rPos]*/
+  s
 }.flatten()
 sentences.removeAll([null])
 
-new File('sentences.txt').text = sentences.join('\n')
+new File('sentences_healtac.txt').text = sentences.join('\n')
