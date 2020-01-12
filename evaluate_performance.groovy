@@ -2,7 +2,7 @@ def tp = 0
 def fp = 0
 def fn = 0
 
-new File('./annotations_fixed.tsv').splitEachLine('\t') {
+new File('./annotations_fixed_second.tsv').splitEachLine('\t') {
   def algorithmTag = it[3].indexOf('negated') != -1
   def groundTruth = it[4].indexOf('negated') != -1
 
@@ -21,6 +21,12 @@ new File('./annotations_fixed.tsv').splitEachLine('\t') {
 
   if(groundTruth && !algorithmTag) {
     fn++
+
+    println 'fn'
+    println it[6]
+    println it[2]
+    println it[5]
+    println ''
   }
 }
 

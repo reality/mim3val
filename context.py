@@ -23,7 +23,7 @@ tn = 0.0
 iris = []
 truths = []
 sentences = []
-with open('./annotations_fixed.tsv') as sentfile:
+with open('./annotations_fixed_second.tsv') as sentfile:
   reader = csv.reader(sentfile, delimiter='\t')
   for row in reader:
     print(row)
