@@ -10,7 +10,7 @@ rfile = open(r'negex_triggers.txt')
 irules = sortRules(rfile.readlines())
 
 sentences = []
-with open('../annotations_fixed.tsv') as f:
+with open('../annotations_fixed_second.tsv') as f:
   r = csv.reader(f, delimiter='\t')
   for row in r:
     row[6] = row[6].replace('(', '. ')

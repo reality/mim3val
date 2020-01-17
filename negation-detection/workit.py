@@ -5,8 +5,8 @@ sentences = []
 with open('../annotations_fixed.tsv') as f:
   r = csv.reader(f, delimiter='\t')
   for row in r:
-#    row[6] = row[6].replace('(', '. ')
-#    row[6] = row[6].replace(')', '. ')
+    #row[6] = row[6].replace('(', '. ')
+    #row[6] = row[6].replace(')', '. ')
     sentences.append({ 'sentence': row[6], 'sid': row[5], 'concept': row[1], 'cname': row[2], 'negated': row[4] })
     print 'sentence: ' + row[6]
     print 'concept: ' + row[2]
