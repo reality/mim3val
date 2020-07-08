@@ -10,15 +10,13 @@ rfile = open(r'negex_triggers.txt')
 irules = sortRules(rfile.readlines())
 
 sentences = []
-with open('../annotations_fixed_second.tsv') as f:
+with open('../komenti/mimic_will_fix.tsv') as f:
   r = csv.reader(f, delimiter='\t')
   for row in r:
-    row[6] = row[6].replace('(', '. ')
-    row[6] = row[6].replace(')', '. ')
-    sentences.append({ 'sentence': row[6], 'sid': row[5], 'concept': row[1], 'cname': row[2], 'negated': row[4] })
-    print 'sentence: ' + row[6]
+    sentences.append({ 'sentence': row[5], 'sid': row[4], 'concept': row[1], 'cname': row[2], 'negated': row[3] })
+    print 'sentence: ' + row[5]
     print 'concept: ' + row[2]
-    print 'negated: ' + row[4]
+    print 'negated: ' + row[3]
     print ''
 
 targets = dict()
@@ -43,13 +41,13 @@ for x in sentences:
                      negP=False)
       #report.append(tagger.getNegTaggedSentence())
   if tagger.getNegationFlag() == 'negated':
-    if x['negated'] == 'negated':
+    if x['negated'] == 'n':
       tp += 1
     else:
       fp += 1
       print(x['sentence'])
   else:
-    if x['negated'] == 'negated':
+    if x['negated'] == 'n':
       fn += 1
     else: 
       tn += 1

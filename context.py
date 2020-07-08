@@ -23,15 +23,15 @@ tn = 0.0
 iris = []
 truths = []
 sentences = []
-with open('./annotations_fixed_second.tsv') as sentfile:
+with open('./komenti/mimic_will_fix.tsv') as sentfile:
   reader = csv.reader(sentfile, delimiter='\t')
   for row in reader:
     print(row)
-    truth = "negated" in row[4]
+    truth = "n" in row[3]
     truths.append(truth)
 
     iris.append(row[1])
-    sentences.append(row[6])
+    sentences.append(row[5])
 
 modifiers = itemData.get_items(
     "https://raw.githubusercontent.com/chapmanbe/pyConTextNLP/20c752d6bd5191833f21ab81fc7f41877dca1db6/KB/pneumonia_modifiers.yml")
